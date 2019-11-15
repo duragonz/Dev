@@ -1,3 +1,12 @@
+
+using System;
+using System.Net;
+using System.Net.Cache;
+using System.Text;
+using System.IO;
+using System.Collections.Generic;
+ 
+
 public class TelegramBot
 {
     private static readonly string _baseUrl = "https://api.telegram.org/bot";
@@ -94,5 +103,28 @@ public class TelegramBot
             .Replace("\t", "\\\t")
             .Replace("\"", "\\\"")
             .Replace("\\", "\\\\");
+    }
+}
+
+public class RemoteAlert 
+{
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Telegram Remote Alert v0.1\n\n");
+        
+        if (args.Length == 0)
+        {
+            Console.WriteLine("사용 예) TelegramRemoteAlert.exe \"보낼 내용\"");
+            return;
+        }
+        
+        string text = args[0];
+        string errorMessage = null;
+        bool ret = TelegramBot.SendMessage(text, out errorMessage);
+        
+        if (ret)
+            Console.WriteLine(String.Format("발송: {0}", text));
+        else
+            Console.WriteLine(String.Format("오류: {0}", errorMessage));
     }
 }
